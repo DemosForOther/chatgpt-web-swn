@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { NButton, NInput, useDialog, useMessage } from 'naive-ui'
+import { NButton, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
@@ -39,6 +39,20 @@ const conversationList = computed(() => dataSources.value.filter(item => (!item.
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
+const selectOptions = [{
+  label: 'Everybody\'s Got Something to Hide Except Me and My Monkey',
+  value: 'song0',
+  disabled: true,
+},
+{
+  label: 'Drive My Car',
+  value: 'song1',
+},
+{
+  label: 'Norwegian Wood',
+  value: 'song2',
+}]
+const selectValue = ref<any>(null)
 
 function handleSubmit() {
   onConversation()
@@ -46,6 +60,9 @@ function handleSubmit() {
 
 async function onConversation() {
   let message = prompt.value
+  const option = selectValue.value
+
+  // console.log(option)
 
   if (loading.value)
     return
@@ -440,6 +457,7 @@ onUnmounted(() => {
           class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
+          <NSelect v-model:value="selectValue" :options="selectOptions" />
           <template v-if="!dataSources.length">
             <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
               <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
